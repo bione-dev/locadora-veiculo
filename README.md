@@ -147,7 +147,3 @@ curl -X GET "http://localhost:8080/veiculos"
 #### Listar Todos os Veículos:
 - **Método**: `GET`
 - **URL**: `http://localhost:8080/veiculos`
-
-## Licença
-
-Este projeto é licenciado sob os termos da [licença MIT](LICENSE).
