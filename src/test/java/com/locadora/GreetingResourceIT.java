@@ -3,6 +3,6 @@ package com.locadora;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 @QuarkusIntegrationTest
-class GreetingResourceIT extends GreetingResourceTest {
-    // Execute the same tests but in packaged mode.
+public class GreetingResourceIT extends GreetingResourceTest {
+    // Executa os mesmos testes no modo empacotado.
 }
