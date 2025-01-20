@@ -1,76 +1,153 @@
-# locadora-veiculo
+# Locadora de Veículos
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Este projeto é uma API RESTful para uma locadora de veículos, construída com Quarkus, Kafka e PostgreSQL.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Estrutura do Projeto
 
-## Running the application in dev mode
+- **com.locadora.api**: Contém os endpoints REST.
+- **com.locadora.model**: Entidades do banco de dados.
+- **com.locadora.kafka**: Comunicação com Kafka (Produtor e Consumidor).
+- **com.locadora.repository**: Repositórios para persistência.
+- **com.locadora.service**: Lógica de negócio.
 
-You can run your application in dev mode that enables live coding using:
+## Dependências
 
-```shell script
-./mvnw quarkus:dev
+- Quarkus RESTEasy
+- Quarkus RESTEasy Jackson
+- Quarkus Hibernate ORM Panache
+- Quarkus JDBC PostgreSQL
+- Quarkus Smallrye Reactive Messaging Kafka
+- Quarkus Arc
+- Quarkus JUnit5 (testes)
+- Rest Assured (testes)
+
+## Configurações
+
+### `application.properties`
+
+```properties
+# Configuração do Kafka
+kafka.bootstrap.servers=localhost:9092
+mp.messaging.incoming.topic-in.connector=smallrye-kafka
+mp.messaging.incoming.topic-in.topic=meu-topico
+mp.messaging.outgoing.topic-out.connector=smallrye-kafka
+mp.messaging.outgoing.topic-out.topic=meu-topico
+
+# Configuração do Banco de Dados
+quarkus.datasource.db-kind=postgresql
+quarkus.datasource.username=meu-usuario
+quarkus.datasource.password=minha-senha
+quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/meu-banco
+quarkus.hibernate-orm.database.generation=update
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+## Endpoints
 
-## Packaging and running the application
+### Criar Veículo
 
-The application can be packaged using:
+Este endpoint faz parte das funcionalidades básicas e permite o cadastro de novos veículos. Novos endpoints relacionados à locação de veículos serão implementados futuramente.
 
-```shell script
-./mvnw package
+- **URL**: `/veiculos`
+- **Método**: `POST`
+
+**Corpo da Requisição:**
+```json
+{
+  "modelo": "Fusca"
+}
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+**Resposta:**
+```json
+{
+  "id": 1,
+  "modelo": "Fusca"
+}
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+### Obter Veículo por ID
 
-## Creating a native executable
+Este endpoint permite consultar um veículo específico pelo seu identificador. Faz parte do módulo inicial de consulta e funcionalidades futuras incluirão mais recursos relacionados à locação de veículos.
 
-You can create a native executable using:
+- **URL**: `/veiculos/{id}`
+- **Método**: `GET`
 
-```shell script
-./mvnw package -Dnative
+**Resposta:**
+```json
+{
+  "id": 1,
+  "modelo": "Fusca"
+}
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+### Listar Todos os Veículos
 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
+Permite listar todos os veículos cadastrados na aplicação.
+
+- **URL**: `/veiculos`
+- **Método**: `GET`
+
+**Resposta:**
+```json
+[
+  {
+    "id": 1,
+    "modelo": "Fusca"
+  },
+  {
+    "id": 2,
+    "modelo": "Corolla"
+  }
+]
 ```
 
-You can then execute your native executable with: `./target/locadora-veiculo-1.0.0-SNAPSHOT-runner`
+## Desenvolvimento Futuro
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
+Atualmente, o projeto inclui funcionalidades básicas de cadastro e consulta de veículos. No futuro, será implementado um sistema completo de locação, utilizando Kafka para comunicação de eventos entre módulos, garantindo escalabilidade e alta disponibilidade.
 
-## Related Guides
+## Rodando a Aplicação
 
-- REST resources for Hibernate ORM with Panache ([guide](https://quarkus.io/guides/rest-data-panache)): Generate Jakarta REST resources for your Hibernate Panache entities and repositories
-- Apache Kafka Client ([guide](https://quarkus.io/guides/kafka)): Connect to Apache Kafka with its native API
-- RESTEasy Classic ([guide](https://quarkus.io/guides/resteasy)): REST endpoint framework implementing Jakarta REST and more
-- JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
+Para rodar a aplicação em modo de desenvolvimento, utilize o seguinte comando:
 
-## Provided Code
+```bash
+mvn compile quarkus:dev
+```
 
-### REST Data with Panache
+## Testando a API
 
-Generating Jakarta REST resources with Panache
+### Usando cURL
 
-[Related guide section...](https://quarkus.io/guides/rest-data-panache)
+#### Criar Veículo:
+```bash
+curl -X POST "http://localhost:8080/veiculos" -H "Content-Type: application/json" -d '{"modelo":"Fusca"}'
+```
 
+#### Obter Veículo por ID:
+```bash
+curl -X GET "http://localhost:8080/veiculos/1"
+```
 
-### RESTEasy JAX-RS
+#### Listar Todos os Veículos:
+```bash
+curl -X GET "http://localhost:8080/veiculos"
+```
 
-Easily start your RESTful Web Services
+### Usando Postman
 
-[Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)
+#### Criar Veículo:
+- **Método**: `POST`
+- **URL**: `http://localhost:8080/veiculos`
+- **Headers**: `Content-Type: application/json`
+- **Body**: `{ "modelo": "Fusca" }`
+
+#### Obter Veículo por ID:
+- **Método**: `GET`
+- **URL**: `http://localhost:8080/veiculos/1`
+
+#### Listar Todos os Veículos:
+- **Método**: `GET`
+- **URL**: `http://localhost:8080/veiculos`
+
+## Licença
+
+Este projeto é licenciado sob os termos da [licença MIT](LICENSE).
