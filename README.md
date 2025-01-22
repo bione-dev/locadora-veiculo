@@ -7,6 +7,7 @@ com.locadora.model: Entidades do banco de dados.
 com.locadora.kafka: Comunicação com Kafka (Produtor e Consumidor).
 com.locadora.repository: Repositórios para persistência.
 com.locadora.service: Lógica de negócio.
+
 Dependências
 Quarkus RESTEasy
 Quarkus RESTEasy Jackson
@@ -22,6 +23,7 @@ application.properties
 properties
 Copiar
 Editar
+
 # Configuração do Kafka
 kafka.bootstrap.servers=localhost:9092
 mp.messaging.incoming.topic-in.connector=smallrye-kafka
@@ -36,6 +38,7 @@ quarkus.datasource.password=minha-senha
 quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/meu-banco
 quarkus.hibernate-orm.database.generation=update
 Endpoints
+
 1. Criar Categoria
 Permite criar uma nova categoria para vincular aos veículos.
 
@@ -44,8 +47,7 @@ Método: POST
 Corpo da Requisição:
 
 json
-Copiar
-Editar
+
 {
   "nome": "Carros Urbanos"
 }
@@ -66,8 +68,8 @@ Método: GET
 Resposta:
 
 json
-Copiar
-Editar
+
+
 [
   {
     "id": 1,
@@ -76,6 +78,10 @@ Editar
   {
     "id": 2,
     "nome": "Carros Premium"
+  }
+    {
+    "id": 3,
+    "nome": "Carros Comerciais"
   }
 ]
 3. Criar Veículo
@@ -86,8 +92,8 @@ Método: POST
 Corpo da Requisição:
 
 json
-Copiar
-Editar
+
+
 {
   "modelo": "Onix",
   "categoria": {
@@ -97,8 +103,8 @@ Editar
 Resposta (Sucesso - 201):
 
 json
-Copiar
-Editar
+
+
 {
   "id": 1,
   "modelo": "Onix",
@@ -107,6 +113,7 @@ Editar
     "nome": "Carros Urbanos"
   }
 }
+
 4. Obter Veículo por ID
 Permite consultar um veículo específico pelo seu identificador.
 
@@ -115,8 +122,8 @@ Método: GET
 Resposta (Sucesso - 200):
 
 json
-Copiar
-Editar
+
+
 {
   "id": 1,
   "modelo": "Onix",
@@ -128,8 +135,7 @@ Editar
 Erro (Não Encontrado - 404):
 
 json
-Copiar
-Editar
+
 {
   "message": "Veículo não encontrado com o ID: {id}"
 }
@@ -141,8 +147,7 @@ Método: GET
 Resposta (Sucesso - 200):
 
 json
-Copiar
-Editar
+
 [
   {
     "id": 1,
@@ -160,6 +165,13 @@ Editar
       "nome": "Carros Premium"
     }
   }
+    {
+    "id": 3,
+    "modelo": "Fiat Fiorino",
+    "categoria": {
+      "id": 3,
+      "nome": "Carros Comerciais"
+    }
 ]
 6. Listar Veículos por Categoria
 Lista todos os veículos associados a uma categoria específica.
@@ -169,8 +181,7 @@ Método: GET
 Resposta (Sucesso - 200):
 
 json
-Copiar
-Editar
+
 [
   {
     "id": 1,
@@ -191,22 +202,19 @@ Rodando a Aplicação
 Para rodar a aplicação em modo de desenvolvimento, utilize o seguinte comando:
 
 bash
-Copiar
-Editar
+
 mvn compile quarkus:dev
 Testando a API
 Usando cURL
 Criar Categoria
 bash
-Copiar
-Editar
+
 curl -X POST "http://localhost:8080/categorias" \
      -H "Content-Type: application/json" \
      -d '{"nome": "Carros Urbanos"}'
 Criar Veículo
 bash
-Copiar
-Editar
+
 curl -X POST "http://localhost:8080/veiculos" \
      -H "Content-Type: application/json" \
      -d '{
@@ -217,11 +225,9 @@ curl -X POST "http://localhost:8080/veiculos" \
          }'
 Listar Categorias
 bash
-Copiar
-Editar
+
 curl -X GET "http://localhost:8080/categorias"
 Listar Veículos
 bash
-Copiar
-Editar
+
 curl -X GET "http://localhost:8080/veiculos"
