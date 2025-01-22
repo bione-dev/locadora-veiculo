@@ -1,31 +1,27 @@
-# Locadora de Veículos
-
+Locadora de Veículos
 Este projeto é uma API RESTful para uma locadora de veículos, construída com Quarkus, Kafka e PostgreSQL.
 
-## Estrutura do Projeto
-
-- **com.locadora.api**: Contém os endpoints REST.
-- **com.locadora.model**: Entidades do banco de dados.
-- **com.locadora.kafka**: Comunicação com Kafka (Produtor e Consumidor).
-- **com.locadora.repository**: Repositórios para persistência.
-- **com.locadora.service**: Lógica de negócio.
-
-## Dependências
-
-- Quarkus RESTEasy
-- Quarkus RESTEasy Jackson
-- Quarkus Hibernate ORM Panache
-- Quarkus JDBC PostgreSQL
-- Quarkus Smallrye Reactive Messaging Kafka
-- Quarkus Arc
-- Quarkus JUnit5 (testes)
-- Rest Assured (testes)
-
-## Configurações
-
-### `application.properties`
-
-```properties
+Estrutura do Projeto
+com.locadora.api: Contém os endpoints REST.
+com.locadora.model: Entidades do banco de dados.
+com.locadora.kafka: Comunicação com Kafka (Produtor e Consumidor).
+com.locadora.repository: Repositórios para persistência.
+com.locadora.service: Lógica de negócio.
+Dependências
+Quarkus RESTEasy
+Quarkus RESTEasy Jackson
+Quarkus Hibernate ORM Panache
+Quarkus JDBC PostgreSQL
+Quarkus Smallrye Reactive Messaging Kafka
+Quarkus Arc
+Quarkus OpenAPI
+Quarkus JUnit5 (testes)
+Rest Assured (testes)
+Configurações
+application.properties
+properties
+Copiar
+Editar
 # Configuração do Kafka
 kafka.bootstrap.servers=localhost:9092
 mp.messaging.incoming.topic-in.connector=smallrye-kafka
@@ -39,111 +35,193 @@ quarkus.datasource.username=meu-usuario
 quarkus.datasource.password=minha-senha
 quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/meu-banco
 quarkus.hibernate-orm.database.generation=update
-```
+Endpoints
+1. Criar Categoria
+Permite criar uma nova categoria para vincular aos veículos.
 
-## Endpoints
+URL: /categorias
+Método: POST
+Corpo da Requisição:
 
-### Criar Veículo
-
-Este endpoint faz parte das funcionalidades básicas e permite o cadastro de novos veículos. Novos endpoints relacionados à locação de veículos serão implementados futuramente.
-
-- **URL**: `/veiculos`
-- **Método**: `POST`
-
-**Corpo da Requisição:**
-```json
+json
+Copiar
+Editar
 {
-  "modelo": "Fusca"
+  "nome": "Carros Urbanos"
 }
-```
+Resposta (Sucesso - 201):
 
-**Resposta:**
-```json
-{
-  "id": 1,
-  "modelo": "Fusca"
-}
-```
-
-### Obter Veículo por ID
-
-Este endpoint permite consultar um veículo específico pelo seu identificador. Faz parte do módulo inicial de consulta e funcionalidades futuras incluirão mais recursos relacionados à locação de veículos.
-
-- **URL**: `/veiculos/{id}`
-- **Método**: `GET`
-
-**Resposta:**
-```json
+json
+Copiar
+Editar
 {
   "id": 1,
-  "modelo": "Fusca"
+  "nome": "Carros Urbanos"
 }
-```
+2. Listar Categorias
+Lista todas as categorias disponíveis.
 
-### Listar Todos os Veículos
+URL: /categorias
+Método: GET
+Resposta:
 
-Permite listar todos os veículos cadastrados na aplicação.
-
-- **URL**: `/veiculos`
-- **Método**: `GET`
-
-**Resposta:**
-```json
+json
+Copiar
+Editar
 [
   {
     "id": 1,
-    "modelo": "Fusca"
+    "nome": "Carros Urbanos"
   },
   {
     "id": 2,
-    "modelo": "Corolla"
+    "nome": "Carros Premium"
   }
 ]
-```
+3. Criar Veículo
+Permite criar um novo veículo vinculado a uma categoria existente.
 
-## Desenvolvimento Futuro
+URL: /veiculos
+Método: POST
+Corpo da Requisição:
 
-Atualmente, o projeto inclui funcionalidades básicas de cadastro e consulta de veículos. No futuro, será implementado um sistema completo de locação, utilizando Kafka para comunicação de eventos entre módulos, garantindo escalabilidade e alta disponibilidade.
+json
+Copiar
+Editar
+{
+  "modelo": "Onix",
+  "categoria": {
+    "id": 1
+  }
+}
+Resposta (Sucesso - 201):
 
-## Rodando a Aplicação
+json
+Copiar
+Editar
+{
+  "id": 1,
+  "modelo": "Onix",
+  "categoria": {
+    "id": 1,
+    "nome": "Carros Urbanos"
+  }
+}
+4. Obter Veículo por ID
+Permite consultar um veículo específico pelo seu identificador.
 
+URL: /veiculos/{id}
+Método: GET
+Resposta (Sucesso - 200):
+
+json
+Copiar
+Editar
+{
+  "id": 1,
+  "modelo": "Onix",
+  "categoria": {
+    "id": 1,
+    "nome": "Carros Urbanos"
+  }
+}
+Erro (Não Encontrado - 404):
+
+json
+Copiar
+Editar
+{
+  "message": "Veículo não encontrado com o ID: {id}"
+}
+5. Listar Todos os Veículos
+Lista todos os veículos cadastrados na aplicação.
+
+URL: /veiculos
+Método: GET
+Resposta (Sucesso - 200):
+
+json
+Copiar
+Editar
+[
+  {
+    "id": 1,
+    "modelo": "Onix",
+    "categoria": {
+      "id": 1,
+      "nome": "Carros Urbanos"
+    }
+  },
+  {
+    "id": 2,
+    "modelo": "Corolla",
+    "categoria": {
+      "id": 2,
+      "nome": "Carros Premium"
+    }
+  }
+]
+6. Listar Veículos por Categoria
+Lista todos os veículos associados a uma categoria específica.
+
+URL: /veiculos/categoria/{categoriaNome}
+Método: GET
+Resposta (Sucesso - 200):
+
+json
+Copiar
+Editar
+[
+  {
+    "id": 1,
+    "modelo": "Onix",
+    "categoria": {
+      "id": 1,
+      "nome": "Carros Urbanos"
+    }
+  }
+]
+Erro (Nenhum Veículo Encontrado - 204): Retorna sem corpo.
+
+Desenvolvimento Futuro
+Implementar sistema de locação de veículos.
+Melhorar a integração com Kafka para comunicação de eventos entre módulos.
+Adicionar autenticação e autorização usando JWT.
+Rodando a Aplicação
 Para rodar a aplicação em modo de desenvolvimento, utilize o seguinte comando:
 
-```bash
+bash
+Copiar
+Editar
 mvn compile quarkus:dev
-```
-
-## Testando a API
-
-### Usando cURL
-
-#### Criar Veículo:
-```bash
-curl -X POST "http://localhost:8080/veiculos" -H "Content-Type: application/json" -d '{"modelo":"Fusca"}'
-```
-
-#### Obter Veículo por ID:
-```bash
-curl -X GET "http://localhost:8080/veiculos/1"
-```
-
-#### Listar Todos os Veículos:
-```bash
+Testando a API
+Usando cURL
+Criar Categoria
+bash
+Copiar
+Editar
+curl -X POST "http://localhost:8080/categorias" \
+     -H "Content-Type: application/json" \
+     -d '{"nome": "Carros Urbanos"}'
+Criar Veículo
+bash
+Copiar
+Editar
+curl -X POST "http://localhost:8080/veiculos" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "modelo": "Onix",
+           "categoria": {
+             "id": 1
+           }
+         }'
+Listar Categorias
+bash
+Copiar
+Editar
+curl -X GET "http://localhost:8080/categorias"
+Listar Veículos
+bash
+Copiar
+Editar
 curl -X GET "http://localhost:8080/veiculos"
-```
-
-### Usando Postman
-
-#### Criar Veículo:
-- **Método**: `POST`
-- **URL**: `http://localhost:8080/veiculos`
-- **Headers**: `Content-Type: application/json`
-- **Body**: `{ "modelo": "Fusca" }`
-
-#### Obter Veículo por ID:
-- **Método**: `GET`
-- **URL**: `http://localhost:8080/veiculos/1`
-
-#### Listar Todos os Veículos:
-- **Método**: `GET`
-- **URL**: `http://localhost:8080/veiculos`
