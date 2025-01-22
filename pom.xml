@@ -26,7 +26,7 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <!-- Quarkus core dependencies -->
+        <!-- Quarkus Core Dependencies -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy</artifactId>
@@ -35,7 +35,8 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy-jackson</artifactId>
         </dependency>
-        <!-- Quarkus Hibernate ORM with Panache for database interactions -->
+
+        <!-- Quarkus Hibernate ORM with Panache -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-hibernate-orm-panache</artifactId>
@@ -44,17 +45,33 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jdbc-postgresql</artifactId>
         </dependency>
-        <!-- Quarkus Kafka dependencies -->
+
+        <!-- Quarkus Kafka for Messaging -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
         </dependency>
-        <!-- Other necessary dependencies -->
+
+        <!-- OpenAPI (sem Swagger UI) -->
+        <dependency>
+            <groupId>org.eclipse.microprofile.openapi</groupId>
+            <artifactId>microprofile-openapi-api</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
+        <!-- Hibernate Validator for Bean Validation -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-validator</artifactId>
+        </dependency>
+
+        <!-- Additional Dependencies -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
         </dependency>
-        <!-- Test dependencies -->
+
+        <!-- Testing Dependencies -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
