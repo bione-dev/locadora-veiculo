@@ -1,5 +1,3 @@
-Aqui está o .readme ajustado com algumas correções de formatação e melhoria na clareza:
-
 ---
 
 # Locadora de Veículos
