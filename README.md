@@ -267,5 +267,3 @@ curl -X GET "http://localhost:8080/veiculos"
 ```
 
 ---
-
-Esse ajuste melhora a legibilidade e estruturação das informações.
